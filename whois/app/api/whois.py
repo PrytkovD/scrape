@@ -4,7 +4,7 @@ from whois21 import WHOIS
 router = APIRouter()
 
 
-@router.get('/{domain_name}')
+@router.get('/')
 async def whois_query_org(domain_name: str):
     query = WHOIS(domain_name)
 
