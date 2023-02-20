@@ -27,10 +27,3 @@ async def get_posts(source: str, limit: int = 100):
             ))
             count += 1
     return response
-
-
-if __name__ == '__main__':
-    import asyncio
-
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(get_posts('me'))
