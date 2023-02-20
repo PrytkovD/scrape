@@ -1,0 +1,40 @@
+services:
+  whois:
+    build: ./whois
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    volumes:
+      - ./whois:/whois
+    ports:
+      - 8001:8000
+  telegram:
+    build: ./telegram
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    volumes:
+      - ./telegram:/telegram
+      - ./common:/telegram/common:ro
+    ports:
+      - 8002:8000
+    environment:
+      - TELEGRAM_API_ID
+      - TELEGRAM_API_HASH
+  vk:
+    build: ./vk
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    volumes:
+      - ./vk:/vk
+      - ./common:/vk/common:ro
+    ports:
+      - 8003:8000
+    environment:
+      - VK_API_ACCESS_TOKEN
+      - VK_API_VERSION
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx_config.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 8080:8080
+    depends_on:
+      - telegram
+      - vk
+      - whois

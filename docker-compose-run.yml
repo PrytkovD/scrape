@@ -1,14 +1,13 @@
 services:
   whois:
-    build: ./whois
+    image: scrape-whois:latest
     command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./whois:/whois
-      - ./common:/whois/common:ro
     ports:
       - 8001:8000
   telegram:
-    build: ./telegram
+    image: scrape-telegram:latest
     command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./telegram:/telegram
@@ -19,7 +18,7 @@ services:
       - TELEGRAM_API_ID
       - TELEGRAM_API_HASH
   vk:
-    build: ./vk
+    image: scrape-vk:latest
     command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./vk:/vk
