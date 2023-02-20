@@ -1,18 +1,32 @@
 # DataMining project No. 1
 
-File structure
+## File structure
 
 ```
 scrape
-|-- API_NAME
-|   |-- app
-|   |   |-- api
-|   |   |   |-- ...
-|   |   |-- main.py
-|   |-- Dockerfile
-|   |-- requirements.txt
-|-- ...
-|-- .env
-|-- docker-compose.yml
-|-- nginx_config.conf
+├── common
+│   └── api
+│       └── models.py
+├── SERVICE
+│   ├── app
+│   │   ├── api
+│   │   │   └── SERVICE.py
+│   │   └── main.py
+│   ├── Dockerfile
+│   └── requirements.txt
+├── ...
+├── .env
+├── docker-compose-CONFIGURATION.yml
+└── nginx_config.conf
 ```
+
+## Requirements
+
+- Docker
+- Docker Compose
+
+## Before you begin
+
+Run `telegram/init.py` to create a Telethon session
+
+Now you can deploy your containers
