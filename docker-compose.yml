@@ -4,6 +4,7 @@ services:
     command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./whois:/whois
+      - ./common:/whois/common:ro
     ports:
       - 8001:8000
   telegram:
@@ -11,6 +12,7 @@ services:
     command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./telegram:/telegram
+      - ./common:/telegram/common:ro
     ports:
       - 8002:8000
     environment:
@@ -21,6 +23,7 @@ services:
     command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./vk:/vk
+      - ./common:/vk/common:ro
     ports:
       - 8003:8000
     environment:

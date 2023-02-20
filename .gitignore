@@ -1,4 +1,6 @@
 .env
-*.log
 .idea
 __pycache__
+*.log
+*.session
+*.session-journal
