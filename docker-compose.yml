@@ -16,6 +16,16 @@ services:
     environment:
       - TELEGRAM_API_ID
       - TELEGRAM_API_HASH
+  vk:
+    build: ./vk
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    volumes:
+      - ./vk:/vk
+    ports:
+      - 8003:8000
+    environment:
+      - VK_API_ACCESS_TOKEN
+      - VK_API_VERSION
   nginx:
     image: nginx:latest
     volumes:
@@ -24,4 +34,5 @@ services:
       - 8080:8080
     depends_on:
       - telegram
+      - vk
       - whois
