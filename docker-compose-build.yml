@@ -6,20 +6,20 @@ services:
       - ./whois:/whois
     ports:
       - 8001:8000
-  telegram:
-    build: ./telegram
-    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-    volumes:
-      - ./telegram:/telegram
-      - ./common:/telegram/common:ro
-    ports:
-      - 8002:8000
-    environment:
-      - TELEGRAM_API_ID
-      - TELEGRAM_API_HASH
-    depends_on:
-      orchestrator:
-        condition: service_healthy
+#  telegram:
+#    build: ./telegram
+#    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+#    volumes:
+#      - ./telegram:/telegram
+#      - ./common:/telegram/common:ro
+#    ports:
+#      - 8002:8000
+#    environment:
+#      - TELEGRAM_API_ID
+#      - TELEGRAM_API_HASH
+#    depends_on:
+#      orchestrator:
+#        condition: service_healthy
   vk:
     build: ./vk
     command: python app/vk.py
@@ -96,6 +96,6 @@ services:
       - 8080:8080
     depends_on:
       - whois
-      - telegram
+#      - telegram
       - vk
       - youtube
