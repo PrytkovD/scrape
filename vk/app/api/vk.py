@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.get('/get/', response_model=List[Post])
 async def get_posts(source: str, limit: int = 100):
-    vk_response = requests.get("https://api.vk.com/method/wall.get",
+    vk_response = requests.get('https://api.vk.com/method/wall.get',
                                params={
                                    'access_token': api_access_token,
                                    'v': api_version,

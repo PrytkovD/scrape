@@ -17,6 +17,8 @@ services:
     environment:
       - TELEGRAM_API_ID
       - TELEGRAM_API_HASH
+    depends_on:
+      - orchestrator
   vk:
     build: ./vk
     command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
@@ -28,6 +30,58 @@ services:
     environment:
       - VK_API_ACCESS_TOKEN
       - VK_API_VERSION
+    depends_on:
+      - orchestrator
+  youtube:
+    build: ./youtube
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    volumes:
+      - ./youtube:/youtube
+      - ./common:/youtube/common:ro
+    ports:
+      - 8004:8000
+    environment:
+      - YOUTUBE_API_KEY
+    depends_on:
+      - orchestrator
+  rabbitmq:
+    build: ./rabbitmq
+    restart: on-failure
+    ports:
+      - 5672:5672
+      - 15672:15672
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  postgres:
+    image: postgres:15.2
+    environment:
+      - PGUSER
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-U", "$${POSTGRES_USER}", "-d", "$${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  orchestrator:
+    build: ./orchestrator
+    volumes:
+      - type: bind
+        source: ./orchestrator
+        target: /orchestrator
+    ports:
+      - 8081:8081
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
   nginx:
     image: nginx:latest
     volumes:
@@ -35,6 +89,7 @@ services:
     ports:
       - 8080:8080
     depends_on:
+      - whois
       - telegram
       - vk
-      - whois
+      - youtube
