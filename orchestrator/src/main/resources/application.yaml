@@ -2,7 +2,7 @@ server:
   port: 8082
 service-rabbit:
   exchangeReceiverName: Planner
-  vk-routing-key: vk;
+  vk-routing-key: vk
   telegram-routing-key: telegram
   youtube-routing-key: youtube
   exchange-sender-name: Sender
@@ -16,3 +16,11 @@ db:
 spring:
   rabbitmq:
     host: rabbitmq
+management:
+  endpoint:
+    health:
+      show-details=always
+  endpoints:
+    web:
+      exposure:
+        include: "*"

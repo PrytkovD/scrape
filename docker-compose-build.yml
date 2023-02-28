@@ -18,10 +18,11 @@ services:
       - TELEGRAM_API_ID
       - TELEGRAM_API_HASH
     depends_on:
-      - orchestrator
+      orchestrator:
+        condition: service_healthy
   vk:
     build: ./vk
-    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    command: python app/vk.py
     volumes:
       - ./vk:/vk
       - ./common:/vk/common:ro
@@ -31,19 +32,19 @@ services:
       - VK_API_ACCESS_TOKEN
       - VK_API_VERSION
     depends_on:
-      - orchestrator
+      orchestrator:
+        condition: service_healthy
   youtube:
     build: ./youtube
-    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    command: python app/youtube.py
     volumes:
       - ./youtube:/youtube
       - ./common:/youtube/common:ro
-    ports:
-      - 8004:8000
     environment:
       - YOUTUBE_API_KEY
     depends_on:
-      - orchestrator
+      orchestrator:
+        condition: service_healthy
   rabbitmq:
     build: ./rabbitmq
     restart: on-failure
@@ -51,7 +52,7 @@ services:
       - 5672:5672
       - 15672:15672
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
+      test: rabbitmq-diagnostics -q status
       interval: 10s
       timeout: 5s
       retries: 10
@@ -82,6 +83,11 @@ services:
         condition: service_healthy
       postgres:
         condition: service_healthy
+    healthcheck:
+      test: curl --fail --silent localhost:8082/actuator/health || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 10
   nginx:
     image: nginx:latest
     volumes:
