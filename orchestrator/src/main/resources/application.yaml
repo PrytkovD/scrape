@@ -1,0 +1,18 @@
+server:
+  port: 8082
+service-rabbit:
+  exchangeReceiverName: Planner
+  vk-routing-key: vk;
+  telegram-routing-key: telegram
+  youtube-routing-key: youtube
+  exchange-sender-name: Sender
+  crawler-routing-key: Crawler
+db:
+  url: jdbc:postgresql://postgres:5432/db
+  username: postgres
+  password: postgres
+  driver-classname: org.postgresql.Driver
+  pool-size: 10
+spring:
+  rabbitmq:
+    host: rabbitmq
